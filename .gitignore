@@ -1,0 +1,10 @@
+.depend
+*.o
+*.d
+*~
+autogen
+LatencySenderComp
+LatencyLoggerComp
+omninames*
+rtc.conf
+.confFilePath
