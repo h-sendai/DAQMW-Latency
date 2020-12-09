@@ -8,6 +8,17 @@
 /home/daq/DAQMW-Latency/latency-sender-logger.xml
 ```
 
+## /etc/omniORB.cfgの設定
+
+2MB以上のデータを送信するために/etc/omniORB.cfgに次の行を
+追加する。
+
+```
+/etc/omniORB.cfg
+# 8MB
+giopMaxMsgSize = 8388608
+```
+
 ## config.xml
 
 latency-sender-logger.xml中のパラメータ
