@@ -13,7 +13,7 @@ do_run()
     sleep 10
     daqcom http://localhost/daqmw/scripts/ -e
     sleep 2
-    cp /tmp/*.dat log/${data_size}.log
+    cp /tmp/*.dat log/${data_size}.dat
     pkill -f Comp
 }
 
