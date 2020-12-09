@@ -17,7 +17,7 @@
                     <hostAddr>127.0.0.1</hostAddr>
                     <hostPort>50000</hostPort>
                     <instName>LatencySender0.rtc</instName>
-                    <execPath>/home/daq/Latency/LatencySender/LatencySenderComp</execPath>
+                    <execPath>/home/daq/DAQMW-Latency/LatencySender/LatencySenderComp</execPath>
                     <confFile>/tmp/daqmw/rtc.conf</confFile>
                     <startOrd>2</startOrd>
                     <inPorts>
@@ -36,7 +36,7 @@
                     <hostAddr>127.0.0.1</hostAddr>
                     <hostPort>50000</hostPort>
                     <instName>LatencyLogger0.rtc</instName>
-                    <execPath>/home/daq/Latency/LatencyLogger/LatencyLoggerComp</execPath>
+                    <execPath>/home/daq/DAQMW-Latency/LatencyLogger/LatencyLoggerComp</execPath>
                     <confFile>/tmp/daqmw/rtc.conf</confFile>
                     <startOrd>1</startOrd>
                     <inPorts>

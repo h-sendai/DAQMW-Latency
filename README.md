@@ -3,9 +3,9 @@
 ## ディレクトリ構成
 
 ```
-/home/daq/Latency/LatencySender
-/home/daq/Latency/LatencyLogger
-/home/daq/Latency/latency-sender-logger.xml
+/home/daq/DAQMW-Latency/LatencySender
+/home/daq/DAQMW-Latency/LatencyLogger
+/home/daq/DAQMW-Latency/latency-sender-logger.xml
 ```
 
 ## config.xml
