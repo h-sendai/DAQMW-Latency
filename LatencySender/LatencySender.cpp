@@ -222,6 +222,11 @@ int LatencySender::daq_run()
     }
 
     if (m_out_status == BUF_SUCCESS) {   // previous OutPort.write() successfully done
+        unsigned long *long_p;
+        long_p = (unsigned long *)&m_data[0];
+        *long_p = m_bufsize_b;
+        clock_gettime(CLOCK_MONOTONIC, (struct timespec *)&m_data[sizeof(unsigned long)]);
+
         set_data(m_bufsize_b); // set data to OutPort Buffer
     }
 

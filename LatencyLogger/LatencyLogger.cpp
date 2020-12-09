@@ -308,8 +308,12 @@ int LatencyLogger::daq_run()
     }
 
     if (m_isDataLogging) {
+        struct timespec *ts_p = (struct timespec *)
+                              &m_in_data.data[HEADER_BYTE_SIZE + sizeof(unsigned long)*3];
+        clock_gettime(CLOCK_MONOTONIC, ts_p);
         int ret = fileUtils->write_data((char *)&m_in_data.data[HEADER_BYTE_SIZE],
-                                        event_byte_size);
+                                        sizeof(unsigned long)*5);
+                                        //event_byte_size);
 
         if (ret < 0) {
             std::cerr << "### LatencyLogger: ERROR occured at data saving\n";
