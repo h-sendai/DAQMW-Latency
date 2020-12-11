@@ -93,8 +93,8 @@ int LatencyLogger::parse_params(::NVList* list)
 {
     int ret = 0;
 
-    bool isExistParamLogging = false;
-    bool isExistParamDirName = false;
+    bool __attribute__((unused)) isExistParamLogging = false;
+    bool __attribute__((unused)) isExistParamDirName = false;
 
     int length = (*list).length();
     for (int i = 0; i < length; i += 2) {
@@ -273,6 +273,13 @@ void LatencyLogger::toLower(std::basic_string<char>& s)
 
 int LatencyLogger::daq_run()
 {
+    // XXX: debug
+    //unsigned long sequence_num = get_sequence_num();
+    //if ((sequence_num % 100) == 0) {
+    //  usleep(400);
+    //}
+
+    unsigned long used_buffer_len = m_InPort.getUsedBufferLen();
 
     int event_byte_size = 0;
     bool ret = m_InPort.read();
@@ -311,8 +318,12 @@ int LatencyLogger::daq_run()
         struct timespec *ts_p = (struct timespec *)
                               &m_in_data.data[HEADER_BYTE_SIZE + sizeof(unsigned long)*3];
         clock_gettime(CLOCK_MONOTONIC, ts_p);
+        unsigned long *used_buffer_len_p = (unsigned long *)
+                              &m_in_data.data[HEADER_BYTE_SIZE + sizeof(unsigned long)*5];
+        *used_buffer_len_p = used_buffer_len;
+
         int ret = fileUtils->write_data((char *)&m_in_data.data[HEADER_BYTE_SIZE],
-                                        sizeof(unsigned long)*5);
+                                        sizeof(unsigned long)*6);
                                         //event_byte_size);
 
         if (ret < 0) {
