@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
         err(1, "fopen");
     }
 
-    unsigned char buf[sizeof(unsigned long) + 2*sizeof(struct timespec)];
+    unsigned char buf[sizeof(unsigned long) + 2*sizeof(struct timespec) + sizeof(unsigned long)];
 
     int n_data = 0;
     for ( ; ; ) {
@@ -89,11 +89,16 @@ int main(int argc, char *argv[])
         struct timespec ts_sender = *ts_sender_p;
         struct timespec ts_logger = *ts_logger_p;
         
+        unsigned long *n_unread_buf_p = (unsigned long *) &buf[sizeof(unsigned long) + 2*sizeof(struct timespec)];
+        unsigned long n_unread_buf = *n_unread_buf_p;
+
         if (do_dump) {
-            printf("%ld.%09ld %ld.%09ld %.3f\n",
+            printf("%ld.%09ld %ld.%09ld %.3f %ld\n",
                 ts_sender.tv_sec, ts_sender.tv_nsec,
                 ts_logger.tv_sec, ts_logger.tv_nsec,
-                data_size/1024.0);
+                data_size/1024.0,
+                n_unread_buf
+            );
         }
         else {
             if (n_data == 1) {
@@ -103,8 +108,8 @@ int main(int argc, char *argv[])
             struct timespec diff, elapsed;
             timespecsub(&ts_logger, &ts_sender, &diff);
             timespecsub(&ts_sender, &start, &elapsed);
-            printf("%ld.%09ld %ld.%09ld %.3f kB\n",
-                elapsed.tv_sec, elapsed.tv_nsec, diff.tv_sec, diff.tv_nsec, data_size/1024.0);
+            printf("%ld.%09ld %ld.%09ld %.3f kB %ld\n",
+                elapsed.tv_sec, elapsed.tv_nsec, diff.tv_sec, diff.tv_nsec, data_size/1024.0, n_unread_buf);
         }
         
     }
