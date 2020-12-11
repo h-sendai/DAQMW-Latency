@@ -54,6 +54,10 @@ struct timespecは送る直前にclock_gettime()で時刻情報を
 
 LatencyLoggerでは受け取ったデータの24バイト名（0オリジン)
 に受け取った時刻をstruct timespecで埋める。
+さらにdaq_run()にはいる直前にInPortバッファでまだ
+読まれていないバッファ個数を追加する。
+このバッファ個数を取得できるようにするためには/usr/include/rtm/InPort.hを
+InPort.getUsedBufferLen.hと入れ替える必要がある。
 
 ```
 63                        0
@@ -67,6 +71,8 @@ LatencyLoggerでは受け取ったデータの24バイト名（0オリジン)
 | struct timespec tv_sec  | (8バイト)
 +-------------------------+
 | struct timespec tv_nsec | (8バイト)
++-------------------------+
+| number of unread buf    | (8バイト)
 +-------------------------+
 ```
 
@@ -86,15 +92,7 @@ LatencyLoggerでは受け取ったデータの24バイト名（0オリジン)
 +-------------------------+
 | struct timespec tv_nsec | (8バイト)
 +-------------------------+
-|     bufsize_kb          | (8バイト)
-+-------------------------+
-| struct timespec tv_sec  | (8バイト)
-+-------------------------+
-| struct timespec tv_nsec | (8バイト)
-+-------------------------+
-| struct timespec tv_sec  | (8バイト)
-+-------------------------+
-| struct timespec tv_nsec | (8バイト)
+| number of unread buf    | (8バイト)
 +-------------------------+
 |     bufsize_kb          | (8バイト)
 +-------------------------+
@@ -105,6 +103,20 @@ LatencyLoggerでは受け取ったデータの24バイト名（0オリジン)
 | struct timespec tv_sec  | (8バイト)
 +-------------------------+
 | struct timespec tv_nsec | (8バイト)
++-------------------------+
+| number of unread buf    | (8バイト)
++-------------------------+
+|     bufsize_kb          | (8バイト)
++-------------------------+
+| struct timespec tv_sec  | (8バイト)
++-------------------------+
+| struct timespec tv_nsec | (8バイト)
++-------------------------+
+| struct timespec tv_sec  | (8バイト)
++-------------------------+
+| struct timespec tv_nsec | (8バイト)
++-------------------------+
+| number of unread buf    | (8バイト)
 +-------------------------+
 (以下送った回数分続く)
 ```
