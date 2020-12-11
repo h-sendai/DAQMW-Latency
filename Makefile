@@ -1,5 +1,6 @@
 SUBDIRS += LatencySender
 SUBDIRS += LatencyLogger
+SUBDIRS += decoder
 
 .PHONY: $(SUBDIRS)
 
