@@ -17,8 +17,9 @@ int debug = 0;
 
 int usage()
 {
-    char msg[] = "Usage: decode-latency [-d] [-h] filename\n"
-                 "-d: debug\n"
+    char msg[] = "Usage: decode-latency [-D] [-d] [-h] filename\n"
+                 "-D: debug\n"
+                 "-d: dump data\n"
                  "-h: help\n";
     fprintf(stderr, "%s", msg);
 
@@ -27,11 +28,15 @@ int usage()
 
 int main(int argc, char *argv[])
 {
+    int do_dump = 0;
     int c;
-    while ( (c = getopt(argc, argv, "dh")) != -1) {
+    while ( (c = getopt(argc, argv, "Ddh")) != -1) {
         switch (c) {
-            case 'd':
+            case 'D':
                 debug = 1;
+                break;
+            case 'd':
+                do_dump = 1;
                 break;
             case 'h':
                 usage();
@@ -84,15 +89,23 @@ int main(int argc, char *argv[])
         struct timespec ts_sender = *ts_sender_p;
         struct timespec ts_logger = *ts_logger_p;
         
-        if (n_data == 1) {
-            start = ts_sender;
+        if (do_dump) {
+            printf("%ld.%09ld %ld.%09ld %.3f\n",
+                ts_sender.tv_sec, ts_sender.tv_nsec,
+                ts_logger.tv_sec, ts_logger.tv_nsec,
+                data_size/1024.0);
         }
+        else {
+            if (n_data == 1) {
+                start = ts_sender;
+            }
 
-        struct timespec diff, elapsed;
-        timespecsub(&ts_logger, &ts_sender, &diff);
-        timespecsub(&ts_sender, &start, &elapsed);
-        printf("%ld.%09ld %ld.%09ld %.3f kB\n",
-            elapsed.tv_sec, elapsed.tv_nsec, diff.tv_sec, diff.tv_nsec, data_size/1024.0);
+            struct timespec diff, elapsed;
+            timespecsub(&ts_logger, &ts_sender, &diff);
+            timespecsub(&ts_sender, &start, &elapsed);
+            printf("%ld.%09ld %ld.%09ld %.3f kB\n",
+                elapsed.tv_sec, elapsed.tv_nsec, diff.tv_sec, diff.tv_nsec, data_size/1024.0);
+        }
         
     }
 
