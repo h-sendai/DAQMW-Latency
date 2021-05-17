@@ -9,4 +9,4 @@ omninames*
 rtc.conf
 .confFilePath
 decode-latency
-log
+log*
