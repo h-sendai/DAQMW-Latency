@@ -1,0 +1,37 @@
+--- InPort.h.orig	2014-10-20 15:29:21.000000000 +0900
++++ InPort.h	2014-05-09 10:17:05.000000000 +0900
+@@ -373,16 +373,34 @@
+           RTC_DEBUG(("isEmpty() = true, buffer is empty"));
+           return true;
+         }
+       
+       RTC_DEBUG(("isEmpty() = false, data exists in the buffer"));
+       return false;
+     }
+ 
++    virtual int getUsedBufferLen()
++    {
++      RTC_TRACE(("getUsedBufferLen()"));
++      int r(0);
++
++      {
++        Guard guard(m_connectorsMutex);
++        if (m_connectors.size() == 0)
++          {
++            RTC_DEBUG(("no connectors"));
++            return -1;
++          }
++        r = m_connectors[0]->getBuffer()->readable();
++      }
++
++      return r;
++    }
++
+     /*!
+      * @if jp
+      *
+      * @brief DataPort から値を読み出す
+      *
+      * InPortに書き込まれたデータを読みだす。接続数が0、またはバッファに
+      * データが書き込まれていない状態で読みだした場合の戻り値は不定である。
+      * バッファが空の状態のとき、
