@@ -218,6 +218,7 @@ int LatencyLogger::daq_start()
             m_filesOpened = true;
         }
     }
+    gettimeofday(&m_tv_start, NULL);
     return 0;
 }
 
@@ -233,6 +234,17 @@ int LatencyLogger::daq_stop()
     }
 
     reset_InPort();
+    
+    gettimeofday(&m_tv_stop, NULL);
+    struct timeval tv_diff;
+    timersub(&m_tv_stop, &m_tv_start, &tv_diff);
+    double run_seconds = tv_diff.tv_sec + 0.000001*tv_diff.tv_usec;
+    unsigned long long total_byte_size = get_total_byte_size();
+    double transfer_rate = total_byte_size / run_seconds;
+    transfer_rate = transfer_rate / 1024.0 /1024.0;
+
+    std::cerr << "run_seconds " << run_seconds << " seconds" << std::endl;
+    std::cerr << "transfer_rate: " << transfer_rate << " MB/s" << std::endl;
     return 0;
 }
 

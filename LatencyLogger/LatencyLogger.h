@@ -60,6 +60,8 @@ private:
     unsigned int m_maxFileSizeInMByte;
     BufferStatus m_in_status;
     int m_update_rate;
+    struct timeval m_tv_start;
+    struct timeval m_tv_stop;
     bool m_debug;
 };
 
