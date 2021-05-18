@@ -26,8 +26,7 @@ do_run()
     pkill -f Comp
 }
 
-#for i in {0..12}; do
-for i in {11..12}; do
+for i in {0..12}; do
     data_size=$((2**${i}))
     echo "---> $data_size"
     do_run $data_size 3
